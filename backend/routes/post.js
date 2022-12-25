@@ -17,4 +17,5 @@ router.route("/post/:id").get(isAuthenticated, likeAndUnlikePost);
 //adding the delete method on the same route either we can just add 
 //the method at he end of the previour route or we can create a seprate route 
 router.route("/post/:id").delete(isAuthenticated, deletePost);
+
 module.exports = router;
