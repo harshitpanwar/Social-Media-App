@@ -29,7 +29,8 @@ exports.createPost = async(req, res)=>{
             post: newPost,
         });
 
-    } catch(error){
+    }
+     catch(error){
         res.status(500).json({
             success: false,
             message: error.message,
@@ -37,4 +38,61 @@ exports.createPost = async(req, res)=>{
         });
     }
 
+}
+
+exports.likeAndUnlikePost = async (req, res) => {
+
+    try {
+        //get parameters from the route
+
+        const post = await Post.findById(req.params.id);
+
+        // post not found
+        if(!post){
+            return res.status(404).json({
+                success: false,
+                message: "Post Not Found"
+            });
+
+        }
+
+        // if our user has already liked the post
+        // then remove his like and
+        // if the user has not liked the post
+        // add the user._id of the user to the post's like array
+
+        if(post.likes.includes(req.user._id)){
+
+            // finds the index of the array 
+            const index = post.likes.indexOf(req.user._id);
+
+            post.likes.splice(index, 1);
+
+            await post.save();
+
+            return res.status(200).json({
+                success:true,
+                message: "Post Unliked",
+            });
+
+        }
+        else{
+            post.likes.push(req.user._id);
+
+            await post.save();
+
+            return res.status(200).json({
+
+                success: true,
+                message: "Post Liked",
+            });
+        }
+
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        })
+    }
 }

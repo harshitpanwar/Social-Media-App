@@ -1,5 +1,5 @@
 const express = require('express');
-const {createPost} = require("../controllers/post");
+const {createPost, likeAndUnlikePost} = require("../controllers/post");
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();
@@ -9,5 +9,7 @@ const router = express.Router();
 // it means that no one can post unless or until they are logged in
 // the isAuthenticated method is called first
 router.route("/post/upload").post(isAuthenticated, createPost);
+
+router.route("/post/:id").get(isAuthenticated, likeAndUnlikePost);
 
 module.exports = router;
