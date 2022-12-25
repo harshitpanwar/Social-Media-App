@@ -195,7 +195,7 @@ exports.getPostsFollowing = async(req, res) => {
         // user.following gives us the _id list of all users whom we are following
         // then using the $in method we match the field owner of the schema Post
         // thus we get all the posts from the users that we are following
-        
+
         const user = await User.findById(req.user._id);
 
         const posts = await Post.find({
@@ -216,4 +216,52 @@ exports.getPostsFollowing = async(req, res) => {
             error: error.message,
         })
     }
+}
+
+exports.updatePost = async(req, res) => {
+
+    try {
+
+        const post = await Post.findById(req.params.id);
+
+        if(!post){
+            return res.status(400).json({
+                success: false, 
+                message: "Post not found",
+            });
+        }
+
+        if(post.owner.toString() !== req.user._id.toString()){
+            return res.status(400).json({
+                success: false,
+                message: "Unauthorised",
+            });
+        }
+
+        const caption = req.body.caption;
+
+        if(!caption){
+            return res.status(400).json({
+                success: false,
+                message: "Enter Valid Caption",
+            });
+        }
+
+        post.caption = caption;
+
+        await post.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Caption Updated successfully",
+
+        });
+        
+    } catch (error) {
+        res.status(400).json({
+            success: true,
+            message: error.message,
+        });
+    }
+
 }
