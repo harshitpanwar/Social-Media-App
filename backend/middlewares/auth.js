@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 exports.isAuthenticated = async(req, res, next) => {
 
 try {
-    console.log('yaha tak to pahuch gya');
+    // console.log('yaha tak to pahuch gya');
 
     const { token } = req.cookies;
-    console.log(token);
-    console.log(req.cookies.token);
+    // console.log(token);
+    // console.log(req.cookies.token);
 
     if(!token){
         return res.status(401).json({
@@ -18,7 +18,10 @@ try {
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
+    // console.log(decoded);
     req.user = await User.findById(decoded._id);
+
+    // console.log(req.user);
 
     next();     
 

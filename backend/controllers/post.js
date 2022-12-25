@@ -42,6 +42,7 @@ exports.createPost = async(req, res)=>{
 
 exports.likeAndUnlikePost = async (req, res) => {
 
+    // console.log(req);
     try {
         //get parameters from the route
 
@@ -61,6 +62,15 @@ exports.likeAndUnlikePost = async (req, res) => {
         // if the user has not liked the post
         // add the user._id of the user to the post's like array
 
+
+        // console.log(post.likes);
+        
+        // console.log("user id yeri\n",req.user);
+        // console.log(req.user._id);
+        // console.log(post.likes);
+        // console.log(post);
+        // console.log(post.likes.includes(req.user.id));
+        // console.log(post.likes.indexOf(req.user.id));
         if(post.likes.includes(req.user._id)){
 
             // finds the index of the array 
@@ -81,6 +91,7 @@ exports.likeAndUnlikePost = async (req, res) => {
         // just make it like the post and add his req.user._id to the likes array
 
         else{
+
             post.likes.push(req.user._id);
 
             await post.save();
@@ -89,6 +100,7 @@ exports.likeAndUnlikePost = async (req, res) => {
 
                 success: true,
                 message: "Post Liked",
+
             });
         }
 

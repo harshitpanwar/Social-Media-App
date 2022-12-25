@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
     },
 
     owner:{
-        type:mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     }, 
 
@@ -20,13 +20,13 @@ const postSchema = new mongoose.Schema({
     }, 
 
     likes: [
+        //don't use anything inside this likes tab else it will be stored as an object and after that it becomes very hard to access
+
         {
-            user:{
-                type:mongoose.Schema.Types.ObjectId, 
-                ref: "User",
-            }
-        }
-    ],
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
 
     comments:[
         {
@@ -34,12 +34,12 @@ const postSchema = new mongoose.Schema({
                 type:mongoose.Schema.Types.ObjectId,
                 ref: "User",
             },
-            commnet:{
-                type:String, 
-                required:true,
-            }
-        }
-    ]
+            comment:{
+                type: String, 
+                required: true,
+            },
+        },
+    ],
 
 });
 
