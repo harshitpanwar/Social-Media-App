@@ -40,7 +40,7 @@ exports.register = async(req, res) =>{
         });
     }
 
-}
+};
 
 exports.login = async(req, res) =>{
     
@@ -91,7 +91,7 @@ exports.login = async(req, res) =>{
 
     }
 
-}
+};
 
 exports.logout = async(req, res) => {
     try {
@@ -110,7 +110,7 @@ exports.logout = async(req, res) => {
             message: error.message
         })
     }
-}
+};
 
 exports.followAndUnfollowUser = async(req, res) => {
 
@@ -177,7 +177,7 @@ exports.followAndUnfollowUser = async(req, res) => {
 
 
 
-}
+};
 
 exports.updatePassword = async(req, res) => {
 
@@ -223,7 +223,7 @@ exports.updatePassword = async(req, res) => {
         });
         
     }
-}
+};
 
 exports.updateProfile = async(req, res) => {
 
@@ -258,4 +258,65 @@ exports.updateProfile = async(req, res) => {
 
     }
 
-}
+};
+
+exports.myProfile = async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id).populate(
+        "posts followers following"
+      );
+  
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+};
+  
+exports.getUserProfile = async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id).populate(
+        "posts followers following"
+      );
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+};
+  
+exports.getAllUsers = async (req, res) => {
+    try {
+      const users = await User.find({
+        name: { $regex: req.query.name, $options: "i" },
+      });
+  
+      res.status(200).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+};
