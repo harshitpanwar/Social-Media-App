@@ -1,5 +1,5 @@
 const express = require('express');
-const {createPost, likeAndUnlikePost} = require("../controllers/post");
+const {createPost, likeAndUnlikePost, deletePost} = require("../controllers/post");
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();
@@ -10,6 +10,11 @@ const router = express.Router();
 // the isAuthenticated method is called first
 router.route("/post/upload").post(isAuthenticated, createPost);
 
+//here we pass the id in params therefore we can directly call the get method
+//and we can pass the arguments in the params of the route 
 router.route("/post/:id").get(isAuthenticated, likeAndUnlikePost);
 
+//adding the delete method on the same route either we can just add 
+//the method at he end of the previour route or we can create a seprate route 
+router.route("/post/:id").delete(isAuthenticated, deletePost);
 module.exports = router;

@@ -76,6 +76,10 @@ exports.likeAndUnlikePost = async (req, res) => {
             });
 
         }
+
+        //else case when the user has not liked the post already 
+        // just make it like the post and add his req.user._id to the likes array
+
         else{
             post.likes.push(req.user._id);
 
@@ -89,10 +93,69 @@ exports.likeAndUnlikePost = async (req, res) => {
         }
 
         
-    } catch (error) {
+    } 
+    catch (error) {
         res.status(500).json({
             success: false,
             message: error.message,
         })
     }
+}
+
+exports.deletePost = async (req, res) => {
+
+try {
+
+    //get params from the route
+    const post = await Post.findById(req.params.id);
+
+    // if post does not exist
+    if(!post){
+        return res.status(404).json({
+            success: false,
+            message: "Post not found",
+        });
+    }
+
+    // if the user deleting the post is not the same as the owner of the post
+    if(post.owner.toString() !== req.user._id.toString()){
+
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized",
+        })
+
+    }
+
+    // the post here will be removed
+    await post.remove();
+
+    // but we also have to remove the post id 
+    // from user who has this post id 
+    // in their User Schema
+    const user = await User.findById(req.user._id);
+
+    // find the index in array where the post is saved
+    const index = user.posts.indexOf(req.params.id);
+
+    //remove starting from the index upto one element
+    user.posts.splice(index, 1);
+
+    await user.save();
+    
+    res.status(200).json({
+        success: true, 
+        message: "Post Deleted",
+    })
+
+
+
+} 
+catch (error) {
+    res.status(500).json({
+        success:false,
+        message: error.message,
+    })
+}
+
 }
