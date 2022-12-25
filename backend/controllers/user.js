@@ -128,6 +128,7 @@ exports.followAndUnfollowUser = async(req, res) => {
 
         }
 
+        //else follow the user
         else{
 
             loggedInUser.following.push(userToFollow._id);
@@ -142,12 +143,9 @@ exports.followAndUnfollowUser = async(req, res) => {
             });
 
         }
-
-
-
-
         
-    } catch (error) {
+    } 
+    catch (error) {
         
         res.status(400).json({
             success: false,
@@ -161,3 +159,4 @@ exports.followAndUnfollowUser = async(req, res) => {
 
 
 }
+

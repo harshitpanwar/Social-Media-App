@@ -1,5 +1,5 @@
 const express = require('express');
-const {createPost, likeAndUnlikePost, deletePost} = require("../controllers/post");
+const {createPost, likeAndUnlikePost, deletePost, getPostsFollowing} = require("../controllers/post");
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();
@@ -17,5 +17,9 @@ router.route("/post/:id").get(isAuthenticated, likeAndUnlikePost);
 //adding the delete method on the same route either we can just add 
 //the method at he end of the previour route or we can create a seprate route 
 router.route("/post/:id").delete(isAuthenticated, deletePost);
+
+//get all posts of all the users that the logged in user has followed
+router.route("/posts").get(isAuthenticated, getPostsFollowing);
+
 
 module.exports = router;

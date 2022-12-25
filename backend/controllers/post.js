@@ -40,7 +40,7 @@ exports.createPost = async(req, res)=>{
 
 }
 
-exports.likeAndUnlikePost = async (req, res) => {
+exports.likeAndUnlikePost = async(req, res) => {
 
     // console.log(req);
     try {
@@ -114,7 +114,7 @@ exports.likeAndUnlikePost = async (req, res) => {
     }
 }
 
-exports.deletePost = async (req, res) => {
+exports.deletePost = async(req, res) => {
 
 try {
 
@@ -170,4 +170,50 @@ catch (error) {
     })
 }
 
+}
+
+exports.getPostsFollowing = async(req, res) => {
+    try {
+
+        //now we can get all posts of the ones we are following by using the populate method
+        // as shown below
+
+        // const user = await User.findById(req.user._id).populate("following", "posts");
+
+        // res.status(200).json({
+        //     success: true,
+        //     following: user.following,
+        // });
+
+        //that was one way to doing it 
+        // we can also use another way
+
+        //here we use the $in method of mongodb 
+        // here we can pass a list of data from which we can match a property
+        // for example here we are matching the "owner" field in our schema of Post
+        // from the list of user.following
+        // user.following gives us the _id list of all users whom we are following
+        // then using the $in method we match the field owner of the schema Post
+        // thus we get all the posts from the users that we are following
+        
+        const user = await User.findById(req.user._id);
+
+        const posts = await Post.find({
+            owner: {
+                $in: user.following,
+            },
+        });
+
+        res.status(200).json({
+            success: true,
+            posts,
+        })
+
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false, 
+            error: error.message,
+        })
+    }
 }
