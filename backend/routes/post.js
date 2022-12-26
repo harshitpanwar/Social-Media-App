@@ -1,6 +1,5 @@
 const express = require('express');
 const {createPost, likeAndUnlikePost, deletePost, getPostsFollowing, updatePost} = require("../controllers/post");
-const { updateProfile } = require('../controllers/user');
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();

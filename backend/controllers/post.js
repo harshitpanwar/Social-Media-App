@@ -265,3 +265,13 @@ exports.updatePost = async(req, res) => {
     }
 
 }
+
+exports.addComment = async(req, res) =>{
+    try {
+
+        // TODO
+        
+    } catch (error) {
+        
+    }
+}
