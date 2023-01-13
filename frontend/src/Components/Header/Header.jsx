@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 const Header = () => {
 	const navRef = useRef();
   const {isAuthenticated} = useSelector((state) => state.user);
-
 	const showNavbar = () => {
 		navRef.current.classList.toggle("responsive_nav");
 	};
